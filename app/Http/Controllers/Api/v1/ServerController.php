@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use App\Server;
 use PDF;
 
@@ -28,8 +29,14 @@ class ServerController extends Controller
             $server = $server->where('sekolah_id', request()->s);
         }
 
-        $server = $server->with(['password'])->paginate(10);
-        return new AppCollection($server);
+        $server = $server->paginate(10);
+        return ['data' => $server];
+    }
+
+    public function getAll()
+    {
+        $servers = Server::orderBy('server_name')->get();
+        return ['data' => $servers ];
     }
 
     /**
@@ -56,7 +63,8 @@ class ServerController extends Controller
             'sekolah_id'            => $request->sekolah_id,
             'serial_number'         => '-',
             'sinkron'               => '0',
-            'status'                => '0'
+            'status'                => '0',
+            'password'              => strtoupper(Str::random(6))
         ];
 
         $data = Server::create($data);

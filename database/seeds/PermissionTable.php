@@ -27,7 +27,8 @@ class PermissionTable extends Seeder
         	'hasil_ujian',
         	'skoring',
         	'filemedia',
-        	'setting'
+        	'setting',
+            'sekolah','create_sekolah','edit_sekolah','delete_sekolah'
         ];
 
         $roles = [

@@ -32,6 +32,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::post('set-role-user', 'RolePermissionController@setRoleUser');
 
 		Route::get('user-authenticated', 'UserController@getUserLogin');
+		Route::get('user-lists', 'UserController@userLists');
 
 		Route::get('matpel/list', 'MatpelController@getAll');
 		Route::apiResource('matpel', 'MatpelController');
@@ -64,6 +65,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::post('upload/file-audio', 'DirectoryController@uploadAudio');
 		Route::get('directory/banksoal/{id}', 'DirectoryController@getDirectoryBanksoal');
 
+		Route::get('server/list', 'ServerController@getAll');
 		Route::apiResource('server','ServerController');
 		Route::post('server/changed/{id}', 'ServerController@changeStatus');
 		Route::post('server/reset-serial/{id}', 'ServerController@resetSerial');

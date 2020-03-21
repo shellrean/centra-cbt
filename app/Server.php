@@ -9,6 +9,6 @@ class Server extends Model
     protected $guarded = [];
 
     protected $hidden = [
-    	'password', 'create_at', 'updated_at'
+    	'created_at', 'updated_at'
     ];
 }

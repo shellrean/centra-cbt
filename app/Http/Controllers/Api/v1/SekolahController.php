@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
 use App\Sekolah;
+use App\User;
 use PDF;
 use DB;
 
@@ -25,13 +26,13 @@ class SekolahController extends Controller
         }
 
         $sekolah = $sekolah->paginate(10);
-        return new AppCollection($sekolah);
+        return ['data' => $sekolah];
     }
 
     public function allSekolah()
     {
         $sekolah = Sekolah::orderBy('nama')->get();
-        return new AppCollection($sekolah);
+        return ['data' => $sekolah];
     }
 
     /**
@@ -59,6 +60,14 @@ class SekolahController extends Controller
         ];
 
         $data = Sekolah::create($data);
+
+        User::create([
+            'name'          => $request->nama,
+            'username'      => $request->nis,
+            'email'         => strtolower($request->nis).'@extraordinarycbt.com',
+            'password'      => bcrypt($request->password),
+            'sekolah_id'    => $data->id
+        ]);
 
         return response()->json(['data' => $data]);
     }
@@ -104,6 +113,9 @@ class SekolahController extends Controller
     public function destroy($id)
     {
         $sekolah = Sekolah::find($id);
+        $user = User::where('sekolah_id', $id)->first();
+        
+        if($user) $user->delete();
 
         $sekolah->delete();
 

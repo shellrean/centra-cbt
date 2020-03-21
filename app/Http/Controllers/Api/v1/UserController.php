@@ -11,6 +11,11 @@ use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
+    public function userLists()
+    {
+        $user = User::orderBy('created_at')->get();
+        return ['data' => $user];
+    }
     /**
 	 * Get all user list
 	 *

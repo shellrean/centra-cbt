@@ -24,6 +24,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 	Route::post('/login', 'AuthController@login');
 
 	Route::group(['middleware' => 'auth:api'], function() {
+		Route::get('/logout', 'AuthController@logout');
 
 		Route::get('roles', 'RolePermissionController@getAllRole');
 		Route::get('permissions', 'RolePermissionController@getallPermission');
@@ -64,6 +65,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 
 		Route::apiResource('directory', 'DirectoryController');
 		Route::post('directory/filemedia', 'DirectoryController@storeFilemedia');
+		Route::delete('directory/filemedia/{id}', 'DirectoryController@deleteFilemedia');
 		Route::post('upload/file-audio', 'DirectoryController@uploadAudio');
 		Route::get('directory/banksoal/{id}', 'DirectoryController@getDirectoryBanksoal');
 

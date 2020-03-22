@@ -51,6 +51,7 @@ class Banksoal extends Model
         ->pluck('jawab_id')
         ->unique();
 
-        return JawabanPeserta::whereNotIn('id', $exists)->count();
+        return JawabanPeserta::whereNotIn('id', $exists)
+        ->whereNotNull('esay')->count();
     }
 }

@@ -119,6 +119,19 @@ class DirectoryController extends Controller
         return response()->json(['data' => $logo]);
     }
 
+    /**
+     *
+     */
+    public function deleteFilemedia($id)
+    {
+        $file = File::find($id);
+        if(file_exists(storage_path('app/'.$file->path))) {
+            unlink(storage_path('app/'.$file->path));
+        }
+        $file->delete();
+        return response()->json([],200);
+    }
+
     public function getDirectoryBanksoal($id)
     {
         $contentDirectory = File::where(['directory_id' => $id]);

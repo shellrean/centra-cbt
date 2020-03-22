@@ -48,9 +48,8 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
-        $cookie = Cookie::forget('_token');
         return response()->json([
             'message' => 'successful-logout'
-        ])->withCookie($cookie);
+        ]);
     }
 }

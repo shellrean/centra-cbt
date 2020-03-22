@@ -189,6 +189,7 @@ class UjianController extends Controller
         ->with(['pertanyaan' => function($q) {
             $q->select(['id','rujukan','pertanyaan']);
         }])
+        ->whereNotNull('esay')
         ->where('banksoal_id', $id)
         ->paginate(10);
 

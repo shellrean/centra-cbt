@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMatpelsTable extends Migration
+class CreateAgamasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateMatpelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('matpels', function (Blueprint $table) {
+        Schema::create('agamas', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_mapel', 100);
-            $table->string('jurusan_id')->nullable();
-            $table->integer('agama_id')->nullable()->default(0);
             $table->string('nama');
             $table->timestamps();
         });
@@ -30,6 +27,6 @@ class CreateMatpelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('matpels');
+        Schema::dropIfExists('agamas');
     }
 }

@@ -33,6 +33,18 @@ class SoalController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $soal = Soal::with('jawabans')->where(['id' => $id])->first();
+        return response()->json(['data' => $soal]);
+    }
+
+    /**
      * Get soal by banksoal
      *
      * @param int $id
@@ -48,6 +60,21 @@ class SoalController extends Controller
         }
 
         $soal = $soal->paginate(10);
+
+        return [ 'data' => $soal ];
+    }
+
+    /**
+     * Get soal by banksoal
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getSoalByBanksoalAll($id)
+    {
+        $this->checkPermissions('soal');
+
+        $soal = Soal::with('jawabans')->where('banksoal_id',$id)->get();
 
         return [ 'data' => $soal ];
     }
@@ -91,10 +118,12 @@ class SoalController extends Controller
         $soal = Soal::find($request->soal_id);
         $soal->pertanyaan = $request->pertanyaan;
         $soal->audio = $request->audio;
+        $soal->direction = $request->direction;
+        $soal->tipe_soal = $request->tipe_soal;
         $soal->rujukan = $request->rujukan;
         $soal->save();
 
-        if($request->tipe_soal == 1) {
+        if($request->tipe_soal != 2 ) {
             DB::table('jawaban_soals')->where('soal_id',$request->soal_id)->delete();
             foreach($request->pilihan as $key=>$pilihan) {
                 JawabanSoal::create([
@@ -116,6 +145,7 @@ class SoalController extends Controller
         $this->checkPermissions('delete_soal');
 
         $soal = Soal::find($id);
+        JawabanSoal::where('soal_id', $soal->id)->delete();
         $soal->delete();
 
         return response()->json(['data' => 'success']);

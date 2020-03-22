@@ -175,11 +175,11 @@ class BanksoalController extends Controller
         $this->checkPermissions('delete_banksoal');
         
         $banksoal = Banksoal::find($id);
-        
+    
+        $banksoal->delete();
+
         File::where('directory_id', $banksoal->directory_id)->delete();
         Directory::find($banksoal->directory_id)->delete();
-        
-        $banksoal->delete();
 
         return response()->json(['status' => 'success']);
     }

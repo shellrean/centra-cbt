@@ -44,7 +44,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::get('banksoal/active', 'BanksoalController@active');
 		Route::apiResource('banksoal', 'BanksoalController');
 
+		Route::resource('/soal', 'SoalController')->only('show');
 		Route::get('soal/banksoal/{id}', 'SoalController@getSoalByBanksoal');
+		Route::get('all-soal/banksoal/{id}','SoalController@getSoalByBanksoalAll');
 		Route::post('soal/banksoal', 'SoalController@storeSoalBanksoal');
 		Route::post('soal/banksoal/edit', 'SoalController@updateSoalBanksoal');
 		Route::delete('soal/banksoal/{id}', 'SoalController@destroySoalBanksoal');
@@ -73,6 +75,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::apiResource('sekolah','SekolahController');
 		Route::get('all-sekolah', 'SekolahController@allSekolah');
 		Route::get('jurusan', 'SekolahController@allJurusan');
+		Route::get('agama', 'SekolahController@allAgama');
 	});
 
 });

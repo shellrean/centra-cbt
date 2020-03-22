@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Jadwal extends Model
 {
-    protected $fillable = [
-    	'banksoal_id','lama','status_ujian','tanggal','mulai','berakhir', 'jadwal_id','alias'
-    ];
+    protected $guarded = [];
 
     protected $appends = [
     	'kode_banksoal','ids'
@@ -19,7 +17,8 @@ class Jadwal extends Model
     ];
 
     protected $casts = [
-    	'banksoal_id' => 'array'
+    	'banksoal_id' => 'array',
+        'server_id'   => 'array'
     ];
 
     public function banksoal() 

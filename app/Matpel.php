@@ -11,6 +11,7 @@ class Matpel extends Model
     protected $hidden = [ 'created_at', 'updated_at' ];
 
     protected $casts = [
-    	'jurusan_id'	=> 'array'
+    	'jurusan_id'	=> 'array',
+    	'server_id'		=> 'array'
     ];
 }

@@ -119,6 +119,15 @@ class UjianController extends Controller
             $data['banksoal_id'] = $fill;
         }
 
+        if($request->server_id != '') { 
+            $fill = array();
+            foreach($request->server_id as $server) {
+                array_push($fill, $server['server_name']);
+            }   
+
+            $data['server_id'] = $fill;
+        }
+
         Jadwal::create($data);
 
         return response()->json(['data' => 'success']);

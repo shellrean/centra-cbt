@@ -134,6 +134,16 @@ class SekolahController extends Controller
 
     /**
      *
+     */
+    public function allAgama()
+    {
+        $data = DB::table('agamas')->get();
+
+        return response()->json(['data' => $data]);
+    }
+
+    /**
+     *
      *
      */
     public function preDataSekolah()

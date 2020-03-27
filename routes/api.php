@@ -79,5 +79,19 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::get('jurusan', 'SekolahController@allJurusan');
 		Route::get('agama', 'SekolahController@allAgama');
 	});
+});
 
+
+/**
+ * @version 1
+ * api response for v1
+ * Response to local server
+ */
+Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
+
+	Route::post('pusat/test-sync', 'PusatController@testSync');
+	Route::post('pusat/register-server', 'PusatController@registerServer');
+	Route::post('pusat/connect', 'PusatController@connect');
+	Route::post('pusat/upload-hasil', 'PusatController@uploadHasil');
+	Route::post('pusat/cbt-sync', 'PusatController@cbtSync');
 });

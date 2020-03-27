@@ -16,7 +16,7 @@ class CreateJadwalsTable extends Migration
         Schema::create('jadwals', function (Blueprint $table) {
             $table->id();
             $table->string('banksoal_id');
-            $table->striing('server_id')->nullable()->default(0);
+            $table->string('server_id')->nullable()->default(0);
             $table->string('alias', 50)->nullable();
             $table->date('tanggal');
             $table->time('mulai');

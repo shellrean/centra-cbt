@@ -21,7 +21,8 @@ class PesertaImport implements ToModel, WithStartRow
             'no_ujian'        => $row[2],
             'nama'            => $row[3],
             'password'        => $row[4],
-            'jurusan_id'      => $row[5]
+            'jurusan_id'      => $row[5],
+            'agama_id'        => $row[6]
         ]);
     }
 

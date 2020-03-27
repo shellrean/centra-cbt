@@ -84,7 +84,7 @@ class MatpelController extends Controller
             'kode_mapel'    => $request->kode_mapel,
             'nama'          => $request->nama,
             'jurusan_id' => ($request->jurusan_id != '' ? array_column($request->jurusan_id, 'id') : 0 ),
-            'agama_id'  => ($request->agama_id != '' ?: 0)
+            'agama_id'  => ($request->agama_id != '' ? $request->agama_id : 0)
         ];
         
 
@@ -133,7 +133,7 @@ class MatpelController extends Controller
             'kode_mapel'    => $request->kode_mapel,
             'nama'          => $request->nama,
             'jurusan_id' => ($request->jurusan_id != '' ? array_column($request->jurusan_id, 'id') : 0 ),
-            'agama_id'  => ($request->agama_id != '' ?: 0)
+            'agama_id'  => ($request->agama_id != '' ? $request->agama_id : 0)
         ];
         
         $matpel = Matpel::find($id);

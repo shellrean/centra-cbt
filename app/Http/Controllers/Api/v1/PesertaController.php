@@ -75,7 +75,8 @@ class PesertaController extends Controller
             'nama'          => 'required',
             'password'      => 'required',
             'sesi'          => 'required',
-            'jurusan_id'    => 'required'
+            'jurusan_id'    => 'required',
+            'agama_id'      => 'required'
         ]);
 
         if($validator->fails()) {
@@ -88,7 +89,8 @@ class PesertaController extends Controller
             'nama'          => $request->nama,
             'password'      => $request->password,
             'sesi'          => $request->sesi,
-            'jurusan_id'    => $request->jurusan_id
+            'jurusan_id'    => $request->jurusan_id,
+            'agama_id'      => $request->agama_id
         ];
 
         $data = Peserta::create($data);

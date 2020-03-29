@@ -53,6 +53,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::delete('soal/banksoal/{id}', 'SoalController@destroySoalBanksoal');
 
 		Route::apiResource('ujian', 'UjianController');
+		Route::get('ujian/list', 'UjianController@getAll');
 		Route::post('ujian/set-status', 'UjianController@setStatus');
 		Route::post('ujian/change-token', 'UjianController@changeToken');
 		Route::get('ujian/get-peserta/{id}', 'UjianController@getPeserta');
@@ -62,6 +63,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::post('ujian/esay/input', 'UjianController@inputEsay');
 		Route::get('ujian/banksoal/{id}', 'UjianController@getByBanksoal');
 		Route::get('ujian/esay/exists', 'UjianController@getExistsEsay');
+		Route::get('ujian/result/sekolah/jadwal/{id}', 'UjianController@getSekolahByJadwal');
+		Route::post('ujian/result/sekolah/hasil', 'UjianController@getHasilByJadwalAndSekolah');
 
 		Route::apiResource('directory', 'DirectoryController');
 		Route::post('directory/filemedia', 'DirectoryController@storeFilemedia');
@@ -78,6 +81,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::get('all-sekolah', 'SekolahController@allSekolah');
 		Route::get('jurusan', 'SekolahController@allJurusan');
 		Route::get('agama', 'SekolahController@allAgama');
+
+		/**
+		 * Heigher actions
+		 * @since 1.0.1
+		 * @author <wandinak17@gmail.com>
+		 */
+		Route::get('heager/generate/hasil-ujian', 'HigherController@generateHasilUjian');
 	});
 });
 

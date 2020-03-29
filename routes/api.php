@@ -65,6 +65,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::get('ujian/esay/exists', 'UjianController@getExistsEsay');
 		Route::get('ujian/result/sekolah/jadwal/{id}', 'UjianController@getSekolahByJadwal');
 		Route::post('ujian/result/sekolah/hasil', 'UjianController@getHasilByJadwalAndSekolah');
+		Route::post('ujian/esay/rujukan', 'UjianController@setRujukan');
 
 		Route::apiResource('directory', 'DirectoryController');
 		Route::post('directory/filemedia', 'DirectoryController@storeFilemedia');

@@ -17,6 +17,7 @@ use App\Jadwal;
 use App\Result;
 use App\Server;
 use App\Sekolah;
+use App\Soal;
 use DB;
 
 use Illuminate\Support\Facades\Validator;
@@ -82,7 +83,7 @@ class UjianController extends Controller
         $rest = DB::table('jawaban_pesertas')
         ->where('jawaban_pesertas.banksoal_id', $id)
         ->join('jadwals', function($j) {
-            $j->on('jawaban_pesertas.jadwal_id', 'jadwals.id');
+            $j->on('jawaban_pesertas.soal_id', 'jadwals.id');
         })
         ->groupBy('jadwals.id')
         ->select('jadwals.id')
@@ -388,6 +389,29 @@ class UjianController extends Controller
 
         return ['data' => $res ];
 
+    }
+
+    /**
+     *
+     */
+    public function setRujukan(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'soal_id'           => 'required',
+            'rujukan'             => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()],422);
+        }
+
+        $soal = Soal::find($request->soal_id);
+        if($soal) {
+            $soal->rujukan = $request->rujukan;
+            $soal->save();
+
+            return response()->json(['message' => 'rujukan success to set'],200);
+        }
     }
 
     /**

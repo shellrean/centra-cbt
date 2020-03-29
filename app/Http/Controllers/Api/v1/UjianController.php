@@ -15,6 +15,8 @@ use App\Banksoal;
 use App\Peserta;
 use App\Jadwal;
 use App\Result;
+use App\Server;
+use App\Sekolah;
 use DB;
 
 use Illuminate\Support\Facades\Validator;
@@ -56,6 +58,18 @@ class UjianController extends Controller
         $ujian = $ujian->paginate(10);
         $ujian->makeHidden('banksoal_id');
         return [ 'data' => $ujian ];
+    }
+
+    /**
+     * Get all ujian without pagination
+     *
+     * @return \Illuminate\http\Response
+     */
+    public function getAll()
+    {
+        $ujians = Jadwal::orderBy('id','desc')->get();
+
+        return ['data' => $ujians ];
     }
 
     /**
@@ -328,6 +342,52 @@ class UjianController extends Controller
         ->makeVisible('koreksi');
 
         return $banksoal;
+    }
+
+    /**
+     *
+     */
+    public function getSekolahByJadwal($jadwal_id)
+    {
+        $result = HasilUjian::where('jadwal_id', $jadwal_id)
+        ->get()->pluck('peserta_id');
+        
+        $name_server = Peserta::whereIn('id', $result)
+        ->get()->pluck('name_server');
+        
+        $sekolah_ids = Server::whereIn('server_name', $name_server)
+        ->get()->pluck('sekolah_id');
+
+        $sekolah = Sekolah::whereIn('id', $sekolah_ids)->get();
+
+        return ['data' => $sekolah];
+    }
+
+    /**
+     *
+     */
+    public function getHasilByJadwalAndSekolah(Request $request) 
+    {
+        $validator = Validator::make($request->all(), [
+            'jadwal_id'           => 'required',
+            'sekolah_id'             => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()],422);
+        }
+
+        $servers = Server::where('sekolah_id', $request->sekolah_id)
+        ->get()->pluck('server_name');
+
+        $pesertas = Peserta::whereIn('name_server', $servers)
+        ->get()->pluck('id');
+
+        $res = HasilUjian::with('peserta')->whereIn('peserta_id', $pesertas)->where('jadwal_id', $request->jadwal_id)
+        ->paginate(30);
+
+        return ['data' => $res ];
+
     }
 
     /**

@@ -19,8 +19,10 @@ class CreateHasilUjiansTable extends Migration
             $table->unsignedBigInteger('jadwal_id');
             $table->integer('jumlah_salah');
             $table->integer('jumlah_benar');
+            $table->float('point_esay');
             $table->integer('tidak_diisi');
             $table->float('hasil');
+            $table->longText('jawaban_peserta');
             $table->timestamps();
 
             $table->foreign('peserta_id')->references('id')->on('pesertas');

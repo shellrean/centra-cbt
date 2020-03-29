@@ -28,18 +28,19 @@ class PermissionTable extends Seeder
         	'skoring',
         	'filemedia',
         	'setting',
-            'sekolah','create_sekolah','edit_sekolah','delete_sekolah'
+            'sekolah','create_sekolah','edit_sekolah','delete_sekolah',
+            'reporting'
         ];
 
         $roles = [
         	'superadmin','admin','teacher','school'
         ];
 
-        foreach ($roles as $role) {
-        	Role::create([
-        		'name'	=> $role
-        	]);
-        }
+        // foreach ($roles as $role) {
+        // 	Role::create([
+        // 		'name'	=> $role
+        // 	]);
+        // }
 
     	$role = Role::find(1);
 

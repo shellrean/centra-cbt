@@ -8,7 +8,7 @@ class Soal extends Model
 {
 	protected $guarded = [];
     protected $hidden = [
-		
+		'analys'
 	];
 
 	public function banksoal()

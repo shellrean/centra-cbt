@@ -21,6 +21,7 @@ class CreateSoalsTable extends Migration
             $table->longText('rujukan');
             $table->string('audio')->nullable();
             $table->string('direction')->nullable();
+            $table->longText('analys')->nullable();
             $table->timestamps();
 
             $table->foreign('banksoal_id')->references('id')->on('banksoals');

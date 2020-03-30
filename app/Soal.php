@@ -8,7 +8,15 @@ class Soal extends Model
 {
 	protected $guarded = [];
     protected $hidden = [
-		'analys'
+		'analys','diagram'
+	];
+
+	protected $appends = [
+		'diagram'
+	];
+
+	protected $casts = [
+		'analys'	=> 'array'
 	];
 
 	public function banksoal()
@@ -19,5 +27,24 @@ class Soal extends Model
     public function jawabans()
     {
     	return $this->hasMany('App\JawabanSoal', 'soal_id','id');
+    }
+
+    public function getDiagramAttribute()
+    {
+    	$array = array();
+	    $array[0] = ['Task','Value'];
+	    if(!is_array($this->analys)) {
+	    	return $array;
+	    }
+	    foreach($this->analys as $key => $value)
+	    {
+	    	if($key == 'updated' || $key == 'penjawab') {
+	    		continue;
+	    	}
+	    	$array[] = [
+	    		$key, $value
+	    	];
+	    }
+	    return $array;
     }
 }

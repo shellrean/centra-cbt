@@ -48,6 +48,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::resource('/soal', 'SoalController')->only('show');
 		Route::get('soal/banksoal/{id}', 'SoalController@getSoalByBanksoal');
 		Route::get('all-soal/banksoal/{id}','SoalController@getSoalByBanksoalAll');
+		Route::get('all-soal/banksoal/analys/{id}', 'SoalController@getSoalByBanksoalAnalys');
 		Route::post('soal/banksoal', 'SoalController@storeSoalBanksoal');
 		Route::post('soal/banksoal/edit', 'SoalController@updateSoalBanksoal');
 		Route::delete('soal/banksoal/{id}', 'SoalController@destroySoalBanksoal');
@@ -89,6 +90,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		 * @author <wandinak17@gmail.com>
 		 */
 		Route::get('heager/generate/hasil-ujian', 'HigherController@generateHasilUjian');
+		Route::get('heager/generate/anayls', 'HigherController@generateAnalys');
+		
 	});
 });
 

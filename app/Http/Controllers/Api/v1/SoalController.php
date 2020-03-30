@@ -80,6 +80,21 @@ class SoalController extends Controller
     }
 
     /**
+     *
+     * @param int $id
+     */
+    public function getSoalByBanksoalAnalys($id)
+    {
+        $this->checkPermissions('reporting');
+
+        $soal = Soal::where('banksoal_id',$id)->get()
+        ->makeVisible('diagram')
+        ->makeVisible('analys');
+
+        return [ 'data' => $soal ];
+    }
+
+    /**
      * Store soal
      *
      * @param \Illuminate\Http\Request $request

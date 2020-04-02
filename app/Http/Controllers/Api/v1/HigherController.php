@@ -177,14 +177,19 @@ class HigherController extends Controller
     {
         $this->checkPermissions('setting');
 
-        $jawaban_peserta = JawabanPeserta::with('pertanyaan')->get();
-        foreach($jawaban_peserta as $jawaban) {
-            if($jawaban->pertanyaan->tipe_soal == 2) {
-                continue;
-            }
+        $activeJadwal = Jadwal::where('status_ujian',1)->get();
+        
+        $useBanksoal = $activeJadwal->flatMap(function ($item, $key) {
+            return $item->banksoal_id;
+        })->pluck('id');
 
-            $soal = Soal::where('id', $jawaban->soal_id)->first();
-            $analys = $soal->analys;
+        $soals = Soal::whereIn('banksoal_id', $useBanksoal)->get()
+        ->makeVisible('salah')
+        ->makeVisible('benar')
+        ->makeVisible('penjawab');
+
+        foreach ($soals as $value) {
+            $analys = $value->analys;
             if(is_array($analys) && $analys['salah']) {
                 $salah = $analys['salah'];
                 $benar = $analys['benar'];
@@ -197,23 +202,18 @@ class HigherController extends Controller
                 $penjawab = 0;
             }
 
-            $p_benar = $jawaban->iscorrect == 1 ? 1 : 0;
-            $p_salah = ($jawaban->iscorrect == 1 && $soal->tipe_soal != 2 )? 0 : 1;
-            $p_kosong = ($jawaban->jawab == 0 && $soal->tipe_soal != 2) ? 1 : 0;
-
             $new = [
-                'salah'     => $salah+$p_salah,
-                'benar'     => $benar+$p_benar,
-                'kosong'    => $kosong+$p_kosong,
-                'penjawab'  => $penjawab+1,
+                'salah'     => $salah+$value->salah,
+                'benar'     => $benar+$value->benar,
+                'kosong'    => $kosong+$value->kosong,
+                'penjawab'  => $penjawab+$value->penjawab,
                 'updated'   => now()
             ];
 
-            $soal->analys = $new;
-            $soal->save();
+            $value->analys = $new;
+            $value->save();
         }
-
-        return response()->json([],201);
+        return response()->json(['message' => 'Analys success'],201);
     }
 
     /**

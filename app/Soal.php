@@ -8,11 +8,11 @@ class Soal extends Model
 {
 	protected $guarded = [];
     protected $hidden = [
-		'analys','diagram'
+		'analys','diagram','salah','benar', 'penjawab', 'kosong'
 	];
 
 	protected $appends = [
-		'diagram'
+		'diagram','salah','benar', 'penjawab', 'kosong'
 	];
 
 	protected $casts = [
@@ -46,5 +46,52 @@ class Soal extends Model
 	    	];
 	    }
 	    return $array;
+    }
+
+    public function getSalahAttribute()
+    {
+    	if($this->tipe_soal == 2) {
+    		return 0;
+    	}
+
+    	$salah = JawabanPeserta::where([
+    		'soal_id' => $this->id,
+    		'iscorrect' => 0
+    	])->count();
+
+    	return $salah;
+    }
+
+    public function getBenarAttribute()
+    {
+    	$benar = JawabanPeserta::where([
+    		'soal_id'	=> $this->id,
+    		'iscorrect'	=> 1
+    	])->count();
+
+    	return $benar;
+    }
+
+    public function getPenjawabAttribute()
+    {
+    	$penjawab = JawabanPeserta::where([
+    		'soal_id'	=> $this->id
+    	])->count();
+
+    	return $penjawab;
+    }
+
+    public function getKosongAttribute()
+    {
+    	if($this->tipe_soal == 2) {
+    		return 0;
+    	}
+
+    	$kosong = JawabanPeserta::where([
+    		'soal_id'		=> $this->id,
+    		'jawab'			=> 0
+    	])->count();
+
+    	return $kosong;
     }
 }

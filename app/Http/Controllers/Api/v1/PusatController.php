@@ -337,9 +337,10 @@ class PusatController extends Controller
                 return response()->json(['data' => 'OK']);
             } catch (QueryException $e) {
                 DB::rollback();
-                return response()->json(['message' => 'Server error'],500);
+                return response()->json(['message' => $e->message],500);
             }
         }
+
         return response()->json(['error'], 500);
     }
 }

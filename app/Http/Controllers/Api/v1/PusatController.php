@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 use App\Matpel;
 use App\Banksoal;
@@ -313,19 +314,28 @@ class PusatController extends Controller
         $data = json_decode($request->datad,true);
 
         if($data != '') {
-            foreach($data as $d) {
-               
-                DB::table('jawaban_pesertas')->insert([
-                    'banksoal_id'   => $d['banksoal_id'],
-                    'soal_id'       => $d['soal_id'],
-                    'peserta_id'    => $d['peserta_id'],
-                    'jadwal_id'     => $d['jadwal_id'],
-                    'jawab'         => $d['jawab'],
-                    'esay'          => $d['esay'],
-                    'ragu_ragu'     => $d['ragu_ragu'],
-                    'iscorrect'     => $d['iscorrect']
-                ]);
+            DB::beginTransaction();
+            try {
                 
+                foreach($data as $d) {
+               
+                    DB::table('jawaban_pesertas')->insert([
+                        'banksoal_id'   => $d['banksoal_id'],
+                        'soal_id'       => $d['soal_id'],
+                        'peserta_id'    => $d['peserta_id'],
+                        'jadwal_id'     => $d['jadwal_id'],
+                        'jawab'         => $d['jawab'],
+                        'esay'          => $d['esay'],
+                        'ragu_ragu'     => $d['ragu_ragu'],
+                        'iscorrect'     => $d['iscorrect']
+                    ]);
+                    
+                }
+                   
+                DB::commit();
+            } catch (QueryException $e) {
+                DB::rollback();
+                return response()->json(['message' => 'Server error'],500);
             }
         }
 

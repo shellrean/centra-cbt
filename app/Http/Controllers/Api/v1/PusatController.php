@@ -16,6 +16,7 @@ use App\Server;
 use App\Directory;
 use App\File;
 use App\Result;
+use App\JawabanPeserta;
 
 use DB;
 
@@ -313,13 +314,13 @@ class PusatController extends Controller
         $esay = json_decode($request->esay, true);
         $data = json_decode($request->datad,true);
 
+        DB::beginTransaction();
         if($data != '') {
-            DB::beginTransaction();
             try {
                 
                 foreach($data as $d) {
-               
-                    DB::table('jawaban_pesertas')->insert([
+    
+                    JawabanPeserta::create([
                         'banksoal_id'   => $d['banksoal_id'],
                         'soal_id'       => $d['soal_id'],
                         'peserta_id'    => $d['peserta_id'],
@@ -333,12 +334,12 @@ class PusatController extends Controller
                 }
                    
                 DB::commit();
+                return response()->json(['data' => 'OK']);
             } catch (QueryException $e) {
                 DB::rollback();
                 return response()->json(['message' => 'Server error'],500);
             }
         }
-
-        return response()->json(['data' => 'OK']);
+        return response()->json(['error'], 500);
     }
 }

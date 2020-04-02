@@ -91,6 +91,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		 */
 		Route::get('heager/generate/hasil-ujian', 'HigherController@generateHasilUjian');
 		Route::get('heager/generate/anayls', 'HigherController@generateAnalys');
+		Route::get('heager/arsip/jawaban', 'HigherController@arsipJawaban');
 		
 	});
 });

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Spatie\Permission\Models\Permission;
+use Illuminate\Database\Eloquent\Builder;
 
 use App\JawabanPeserta;
 use App\SiswaUjian;
@@ -314,7 +315,7 @@ class UjianController extends Controller
             $j->where('banksoals.id','=',$banksoal_id)
             ->on('banksoals.matpel_id', 'matpels.id');
         })
-        ->select('pesertas.nama','results.hasil','results.salah','results.benar','results.kosong')
+        ->select('pesertas.id','pesertas.nama','results.hasil','results.salah','results.benar','results.kosong')
         ->orderBy('pesertas.id')
         ->get();
 
@@ -384,7 +385,10 @@ class UjianController extends Controller
         $pesertas = Peserta::whereIn('name_server', $servers)
         ->get()->pluck('id');
 
-        $res = HasilUjian::with('peserta')->whereIn('peserta_id', $pesertas)->where('jadwal_id', $request->jadwal_id)
+        $res = HasilUjian::with('peserta')
+        ->whereIn('peserta_id', $pesertas)
+        ->where('jadwal_id', $request->jadwal_id)
+        ->orderBy('peserta_id')
         ->paginate(30);
 
         return ['data' => $res ];

@@ -398,6 +398,73 @@ class UjianController extends Controller
     /**
      *
      */
+    public function getBanksoalByJadwalAndSekolah(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'jadwal_id'           => 'required',
+            'sekolah_id'             => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()],422);
+        }
+
+        $servers = Server::where('sekolah_id', $request->sekolah_id)
+        ->get()->pluck('server_name');
+
+        $pesertas = Peserta::whereIn('name_server', $servers)
+        ->get()->pluck('id');
+
+        $res = HasilUjian::whereIn('peserta_id', $pesertas)
+        ->where('jadwal_id', $request->jadwal_id)
+        ->get()
+        ->makeVisible('jawaban_peserta');
+
+        $der = $res->flatMap(function($value) {
+            return $value->jawaban_peserta;
+        })->pluck('banksoal_id')->unique();
+
+        $bankSoal = Banksoal::find($der);
+
+        return ['data' => $bankSoal ];
+    }
+
+    /**
+     *
+     */
+    public function getCapaianSiswa(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'jadwal_id'           => 'required',
+            'sekolah_id'             => 'required',
+            'banksoal_id'           => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()],422);
+        }
+
+        $soals = Soal::where('banksoal_id', $request->banksoal_id)->orderBy('tipe_soal')->get();
+
+        $s = HasilUjian::with('peserta')
+        ->where('jadwal_id', $request->jadwal_id)
+        ->get()
+        ->makeVisible('jawaban_peserta');
+
+        $filtered = $s->reject(function ($value, $key) use ($request){
+            return $value->jawaban_peserta[0]['banksoal_id'] != $request->banksoal_id;
+        });
+
+        $der = $filtered->map(function($value) {
+            return [$value->peserta, collect($value->jawaban_peserta)->sortBy('soal_id')];
+        });
+
+        return ['soals' => $soals, 'data' => $der->values()];
+    }
+
+    /**
+     *
+     */
     public function setRujukan(Request $request)
     {
         $validator = Validator::make($request->all(), [

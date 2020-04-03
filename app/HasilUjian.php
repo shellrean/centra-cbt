@@ -12,6 +12,10 @@ class HasilUjian extends Model
 		'created_at','updated_at','jawaban_peserta'
 	];
 
+	protected $casts = [
+        'jawaban_peserta' => 'array'
+    ];
+
     public function peserta() 
     {
     	return $this->hasOne('App\Peserta', 'id', 'peserta_id');

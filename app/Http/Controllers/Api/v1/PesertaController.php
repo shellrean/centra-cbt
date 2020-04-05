@@ -54,7 +54,7 @@ class PesertaController extends Controller
             $peserta = $peserta->whereIn('name_server', $server);
         }
 
-        $peserta = $peserta->paginate(10);
+        $peserta = $peserta->paginate(40);
 
         return [ 'data' => $peserta ];
     }

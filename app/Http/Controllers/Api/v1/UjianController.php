@@ -57,7 +57,7 @@ class UjianController extends Controller
         if (request()->q != '') {
             $ujian = $ujian->where('token', 'LIKE', '%'. request()->q.'%');
         }
-        $ujian = $ujian->paginate(10);
+        $ujian = $ujian->paginate(20);
         $ujian->makeHidden('banksoal_id');
         return [ 'data' => $ujian ];
     }

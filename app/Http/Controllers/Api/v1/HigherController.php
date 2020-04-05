@@ -70,8 +70,8 @@ class HigherController extends Controller
     				'peserta_id'=> $not
     			])
                 ->where('jawab', '!=', 0)
-                ->get()
-                ->pluck('jawab')->unique()
+                // ->get()
+                // ->pluck('jawab')->unique()
                 ->count();
 
     			$benar = JawabanPeserta::whereHas('pertanyaan', function(Builder $query) {
@@ -82,9 +82,9 @@ class HigherController extends Controller
                     'jadwal_id' => $aktif,
                     'peserta_id'=> $not
                 ])
-                ->get()
-                ->pluck('jawab')
-                ->unique()
+                // ->get()
+                // ->pluck('jawab')
+                // ->unique()
                 ->count();
 
                 $kosong = JawabanPeserta::whereHas('pertanyaan', function(Builder $query) {
@@ -95,7 +95,7 @@ class HigherController extends Controller
                     'jadwal_id' => $aktif,
                     'peserta_id'=> $not
                 ])
-                ->get()
+                // ->get()
                 ->count();
 
                 $jmlh = JawabanPeserta::whereHas('pertanyaan', function(Builder $query) {
@@ -105,16 +105,16 @@ class HigherController extends Controller
                     'jadwal_id' => $aktif,
                     'peserta_id'=> $not
                 ])
-                ->get()
-                ->pluck('jawab')
-                ->unique()
+                // ->get()
+                // ->pluck('jawab')
+                // ->unique()
                 ->count();
 
 
     			if($benar == 0) {
     				$hasil_ganda = 0;
     			} else {
-    				$hasil_ganda = ($benar/($jmlh+$kosong-1));
+    				$hasil_ganda = ($benar/$jmlh);
     			}
 
     			$hasil_esay = 0;

@@ -114,7 +114,7 @@ class HigherController extends Controller
     			if($benar == 0) {
     				$hasil_ganda = 0;
     			} else {
-    				$hasil_ganda = ($benar/($jmlh+$kosong));
+    				$hasil_ganda = ($benar/($jmlh+$kosong-1));
     			}
 
     			$hasil_esay = 0;

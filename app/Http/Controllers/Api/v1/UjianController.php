@@ -448,6 +448,7 @@ class UjianController extends Controller
 
         $s = HasilUjian::with('peserta')
         ->where('jadwal_id', $request->jadwal_id)
+        ->orderBy('peserta_id')
         ->get()
         ->makeVisible('jawaban_peserta');
 

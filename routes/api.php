@@ -54,6 +54,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::delete('soal/banksoal/{id}', 'SoalController@destroySoalBanksoal');
 
 		Route::apiResource('ujian', 'UjianController');
+		Route::post('event-ujian', 'UjianController@storeEventUjian');
+		Route::get('event-ujian', 'UjianController@getEventUjian');
 		Route::get('ujian/list', 'UjianController@getAll');
 		Route::post('ujian/set-status', 'UjianController@setStatus');
 		Route::post('ujian/change-token', 'UjianController@changeToken');

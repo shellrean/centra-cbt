@@ -26,6 +26,11 @@ class Jadwal extends Model
     	return $this->hasOne('App\Banksoal','id','banksoal_id');
     }
 
+    public function event()
+    {
+        return $this->belongsTo(EventUjian::class);
+    }
+
     public function getKodeBanksoalAttribute()
     {
     	$ids = array_column($this->banksoal_id, 'id');

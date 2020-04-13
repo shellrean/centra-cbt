@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMatpelsTable extends Migration
+class CreateEventUjiansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateMatpelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('matpels', function (Blueprint $table) {
+        Schema::create('event_ujians', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_mapel', 100);
-            $table->string('jurusan_id')->nullable();
-            $table->integer('agama_id')->nullable()->default(0);
-            $table->string('correctors')->nullable();
-            $table->string('nama');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ class CreateMatpelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('matpels');
+        Schema::dropIfExists('event_ujians');
     }
 }

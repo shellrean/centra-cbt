@@ -24,8 +24,12 @@ class SekolahController extends Controller
         if(request()->q != '') {
             $sekolah = $sekolah->where('nama','LIKE', '%'.request()->q.'%');
         }
+        if(request()->perPage != '') {
+            $sekolah = $sekolah->paginate(request()->perPage);
+        } else {
+            $sekolah = $sekolah->paginate(10);
+        }
 
-        $sekolah = $sekolah->paginate(10);
         return ['data' => $sekolah];
     }
 

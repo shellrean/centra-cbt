@@ -23,6 +23,7 @@ class CreateJadwalsTable extends Migration
             $table->time('berakhir');
             $table->integer('lama');
             $table->char('status_ujian',1);
+            $table->unsignedBigInteger('event_id');
             $table->timestamps();
         });
     }

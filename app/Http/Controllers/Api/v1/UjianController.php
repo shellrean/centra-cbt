@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Eloquent\Builder;
 
 use App\JawabanPeserta;
+use App\EventUjian;
 use App\SiswaUjian;
 use App\HasilUjian;
 use App\ResultEsay;
@@ -53,11 +54,15 @@ class UjianController extends Controller
     {
     	$this->checkPermissions('jadwal');
 
-        $ujian = Jadwal::orderBy('created_at', 'DESC');
+        $ujian = Jadwal::with('event')->orderBy('created_at', 'DESC');
         if (request()->q != '') {
-            $ujian = $ujian->where('token', 'LIKE', '%'. request()->q.'%');
+            $ujian = $ujian->where('alias', 'LIKE', '%'. request()->q.'%');
         }
-        $ujian = $ujian->paginate(20);
+        if (request()->perPage != '') {
+            $ujian = $ujian->paginate(request()->perPage);
+        } else {
+            $ujian = $ujian->paginate(20);
+        }
         $ujian->makeHidden('banksoal_id');
         return [ 'data' => $ujian ];
     }
@@ -119,7 +124,8 @@ class UjianController extends Controller
             'lama'              => $request->lama*60,
             'tanggal'           => date('Y-m-d',strtotime($request->tanggal)),
             'status_ujian'      => 0,
-            'alias'             => $request->alias
+            'alias'             => $request->alias,
+            'event_id'          => $request->event_id
         ];
 
         if($request->banksoal_id != '') {
@@ -147,6 +153,42 @@ class UjianController extends Controller
         Jadwal::create($data);
 
         return response()->json(['data' => 'success']);
+    }
+
+    /**
+     * Store event ujian.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeEventUjian(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'           => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()],422);
+        }
+
+        EventUjian::create([
+            'name'      => $request->name
+        ]);
+
+        return response()->json([], 201);
+    }
+
+    /**
+     * Get ujian event
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Response
+     */
+    public function getEventUjian()
+    {
+        $events = EventUjian::orderBy('created_at','DESC')->get();
+
+        return ['data' => $events ];
     }
 
     /**
@@ -216,6 +258,8 @@ class UjianController extends Controller
     {
         $jawab = JawabanPeserta::find($request->id);
 
+        $user = request()->user('api'); 
+
         $has = ResultEsay::where('banksoal_id', $jawab->banksoal_id)->get()->pluck('jawab_id');
         $sames = JawabanPeserta::whereNotIn('id',$has)
         ->where(['esay' => $jawab->esay, 'banksoal_id' => $jawab->banksoal_id, 'soal_id' => $jawab->soal_id])
@@ -227,6 +271,7 @@ class UjianController extends Controller
                     'banksoal_id'   => $same->banksoal_id,
                     'peserta_id'    => $same->peserta_id,
                     'jawab_id'      => $same->id,
+                    'corrected_by'  => $user->id,
                     'point'         => $request->val
                 ]);
             }
@@ -234,10 +279,12 @@ class UjianController extends Controller
             return response()->json(['data' => 'OK1']);
         }
 
+
         ResultEsay::create([
             'banksoal_id'   => $jawab->banksoal_id,
             'peserta_id'    => $jawab->peserta_id,
             'jawab_id'      => $jawab->id,
+            'corrected_by'  => $user->id,
             'point'         => $request->val
         ]);
 
@@ -329,13 +376,15 @@ class UjianController extends Controller
     {
         $has = ResultEsay::all()->pluck('jawab_id')->unique();
 
+        $user = request()->user('api');
+
         $exists = JawabanPeserta::whereNotNull('esay')
         ->whereNotIn('id', $has)
         ->get()
         ->pluck('banksoal_id')
         ->unique();
 
-        $banksoal = Banksoal::whereIn('id', $exists)->get()
+        $banksoal = Banksoal::with('matpel')->whereIn('id', $exists)->get()
         ->makeHidden('jumlah_soal')
         ->makeHidden('jumlah_pilihan')
         ->makeHidden('matpel_id')
@@ -343,7 +392,11 @@ class UjianController extends Controller
         ->makeHidden('inputed')
         ->makeVisible('koreksi');
 
-        return $banksoal;
+        $filtered = $banksoal->reject(function ($value, $key) use($user) {
+            return !in_array($user->id, $value->matpel->correctors);
+        });
+
+        return ['data' => $filtered->values()->all()];
     }
 
     /**
@@ -434,6 +487,7 @@ class UjianController extends Controller
      */
     public function getCapaianSiswa(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'jadwal_id'           => 'required',
             'sekolah_id'             => 'required',

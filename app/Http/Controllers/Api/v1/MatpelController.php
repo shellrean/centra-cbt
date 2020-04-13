@@ -44,8 +44,13 @@ class MatpelController extends Controller
         if (request()->q != '') {
             $matpels = $matpels->where('nama', 'LIKE', '%'. request()->q.'%');
         }
+
+        if(request()->perPage != '') {
+            $matpels = $matpels->paginate(request()->perPage);
+        } else {
+            $matpels = $matpels->get();
+        }
         
-        $matpels = $matpels->paginate(10);
         return [ 'data' => $matpels ];
     }
 
@@ -84,6 +89,7 @@ class MatpelController extends Controller
             'kode_mapel'    => $request->kode_mapel,
             'nama'          => $request->nama,
             'jurusan_id' => ($request->jurusan_id != '' ? array_column($request->jurusan_id, 'id') : 0 ),
+            'correctors' => ($request->correctors != '' ? array_column($request->correctors, 'id') : 0 ),
             'agama_id'  => ($request->agama_id != '' ? $request->agama_id : 0)
         ];
         
@@ -133,6 +139,7 @@ class MatpelController extends Controller
             'kode_mapel'    => $request->kode_mapel,
             'nama'          => $request->nama,
             'jurusan_id' => ($request->jurusan_id != '' ? array_column($request->jurusan_id, 'id') : 0 ),
+            'correctors' => ($request->correctors != '' ? array_column($request->correctors, 'id') : 0 ),
             'agama_id'  => ($request->agama_id != '' ? $request->agama_id : 0)
         ];
         

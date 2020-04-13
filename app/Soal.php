@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Soal extends Model
 {
 	protected $guarded = [];
+
     protected $hidden = [
 		'analys','diagram','salah','benar', 'penjawab', 'kosong'
 	];
@@ -16,7 +17,8 @@ class Soal extends Model
 	];
 
 	protected $casts = [
-		'analys'	=> 'array'
+		'analys'	=> 'array',
+        'created_at' => 'datetime:d/m/Y h:i:s A'
 	];
 
 	public function banksoal()

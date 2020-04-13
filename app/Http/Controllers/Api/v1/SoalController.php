@@ -56,11 +56,14 @@ class SoalController extends Controller
 
         $soal = Soal::with('jawabans')->where('banksoal_id',$id);
         if (request()->q != '') {
-            $soal = $soal->where('kode_banksoal', 'LIKE', '%'. request()->q.'%');
+            $soal = $soal->where('pertanyaan', 'LIKE', '%'. request()->q.'%');
         }
 
-        $soal = $soal->paginate(10);
-
+        if (request()->perPage != '') {
+            $soal = $soal->paginate(request()->perPage);
+        } else {
+            $soal = $soal->get();
+        }
         return [ 'data' => $soal ];
     }
 

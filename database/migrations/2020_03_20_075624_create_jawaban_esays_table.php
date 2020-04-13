@@ -18,12 +18,14 @@ class CreateJawabanEsaysTable extends Migration
             $table->unsignedBigInteger('banksoal_id');
             $table->unsignedBigInteger('peserta_id');
             $table->unsignedBigInteger('jawab_id');
+            $table->unsignedBigInteger('corrected_by');
             $table->float('point');
             $table->timestamps();
 
             $table->foreign('banksoal_id')->references('id')->on('banksoals');
             $table->foreign('peserta_id')->references('id')->on('pesertas');
             $table->foreign('jawab_id')->references('id')->on('jawaban_pesertas');
+            $table->foreign('corrected_by')->references('id')->on('users');
         });
     }
 

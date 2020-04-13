@@ -58,8 +58,11 @@ class BanksoalController extends Controller
         if ($user->role != 0) {
             $banksoal = $banksoal->where('author',$user->id);
         }
-
-        $banksoal = $banksoal->paginate(10);
+        if(request()->perPage != '') {
+            $banksoal = $banksoal->paginate(request()->perPage);
+        } else {
+            $banksoal = $banksoal->get();
+        }
         return [ 'data' => $banksoal ];
     }
 

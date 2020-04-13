@@ -172,7 +172,8 @@ class PusatController extends Controller
         ->makeHidden('server_id')
         ->makeVisible('ids')
         ->makeHidden('created_at')
-        ->makeHidden('updated_at');
+        ->makeHidden('updated_at')
+        ->makeHidden('event_id');
 
         $jadwal = $jad1->pluck('banksoal_id');
 

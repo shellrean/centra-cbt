@@ -146,7 +146,7 @@ class HigherController extends Controller
                 $jml_esay = $bks->jumlah_soal_esay;
 
                 if($jml_esay != 0) {
-        			$hasil = ($hasil_ganda*80)+(($hasil_esay/$jml_esay)*20);
+        			$hasil = ($hasil_ganda*60)+(($hasil_esay/$jml_esay)*40);
                 } else {
                     $hasil = $hasil_ganda*100;   
                 }

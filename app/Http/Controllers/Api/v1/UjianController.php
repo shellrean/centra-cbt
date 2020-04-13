@@ -441,8 +441,13 @@ class UjianController extends Controller
         $res = HasilUjian::with('peserta')
         ->whereIn('peserta_id', $pesertas)
         ->where('jadwal_id', $request->jadwal_id)
-        ->orderBy('peserta_id')
-        ->paginate(30);
+        ->orderBy('peserta_id');
+
+        if(request()->perPage != '') {
+            $res = $res->paginate(request()->perPage);
+        } else {
+            $res = $res->get();
+        }
 
         return ['data' => $res ];
 

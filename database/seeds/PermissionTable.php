@@ -36,11 +36,11 @@ class PermissionTable extends Seeder
         	'superadmin','admin','teacher','school'
         ];
 
-        // foreach ($roles as $role) {
-        // 	Role::create([
-        // 		'name'	=> $role
-        // 	]);
-        // }
+        foreach ($roles as $role) {
+        	Role::create([
+        		'name'	=> $role
+        	]);
+        }
 
     	$role = Role::find(1);
 

@@ -37,6 +37,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 
 		Route::get('matpel/list', 'MatpelController@getAll');
 		Route::apiResource('matpel', 'MatpelController');
+        Route::apiResource('jurusans', 'JurusanController');
 
 		Route::apiResource('peserta', 'PesertaController')->except('show','update');
 		Route::post('peserta/upload', 'PesertaController@import');

@@ -120,6 +120,10 @@ class DirectoryController extends Controller
     }
 
     /**
+     * 
+     */
+
+    /**
      *
      */
     public function deleteFilemedia($id)

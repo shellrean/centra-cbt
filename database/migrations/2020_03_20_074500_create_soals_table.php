@@ -24,7 +24,7 @@ class CreateSoalsTable extends Migration
             $table->longText('analys')->nullable();
             $table->timestamps();
 
-            $table->foreign('banksoal_id')->references('id')->on('banksoals');
+            $table->foreign('banksoal_id')->references('id')->on('banksoals')->onDelete('cascade');
         });
     }
 

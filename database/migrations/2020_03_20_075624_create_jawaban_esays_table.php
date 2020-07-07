@@ -22,10 +22,10 @@ class CreateJawabanEsaysTable extends Migration
             $table->float('point');
             $table->timestamps();
 
-            $table->foreign('banksoal_id')->references('id')->on('banksoals');
-            $table->foreign('peserta_id')->references('id')->on('pesertas');
-            $table->foreign('jawab_id')->references('id')->on('jawaban_pesertas');
-            $table->foreign('corrected_by')->references('id')->on('users');
+            $table->foreign('banksoal_id')->references('id')->on('banksoals')->onDelete('cascade');
+            $table->foreign('peserta_id')->references('id')->on('pesertas')->onDelete('cascade');
+            $table->foreign('jawab_id')->references('id')->on('jawaban_pesertas')->onDelete('cascade');
+            $table->foreign('corrected_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

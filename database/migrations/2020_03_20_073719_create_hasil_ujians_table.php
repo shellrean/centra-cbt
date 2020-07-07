@@ -25,8 +25,8 @@ class CreateHasilUjiansTable extends Migration
             $table->longText('jawaban_peserta');
             $table->timestamps();
 
-            $table->foreign('peserta_id')->references('id')->on('pesertas');
-            $table->foreign('jadwal_id')->references('id')->on('jadwals');
+            $table->foreign('peserta_id')->references('id')->on('pesertas')->onDelete('cascade')->onDelete('cascade');
+            $table->foreign('jadwal_id')->references('id')->on('jadwals')->onDelete('cascade')->onDelete('cascade');
         });
     }
 

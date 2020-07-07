@@ -19,11 +19,15 @@ use Illuminate\Support\Facades\Route;
  * api response for v1
  */
 
+Route::get('/tester', 'TesterController@index');
+
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 
 	Route::post('/login', 'AuthController@login');
 
 	Route::group(['middleware' => 'auth:api'], function() {
+        Route::post('/upl-d', 'TesterController@upload');
+
 		Route::get('/logout', 'AuthController@logout');
 
 		Route::get('roles', 'RolePermissionController@getAllRole');

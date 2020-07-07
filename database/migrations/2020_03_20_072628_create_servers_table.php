@@ -24,7 +24,7 @@ class CreateServersTable extends Migration
             $table->char('sinkron',1);
             $table->timestamps();
 
-            $table->foreign('sekolah_id')->references('id')->on('sekolahs');
+            $table->foreign('sekolah_id')->references('id')->on('sekolahs')->onDelete('cascade');
         });
     }
 

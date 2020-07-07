@@ -25,10 +25,10 @@ class CreateJawabanPesertas extends Migration
             $table->char('iscorrect',1)->default(0);
             $table->timestamps();
 
-            $table->foreign('banksoal_id')->references('id')->on('banksoals');
-            $table->foreign('soal_id')->references('id')->on('soals');
-            $table->foreign('peserta_id')->references('id')->on('pesertas');
-            $table->foreign('jadwal_id')->references('id')->on('jadwals');
+            $table->foreign('banksoal_id')->references('id')->on('banksoals')->onDelete('cascade');
+            $table->foreign('soal_id')->references('id')->on('soals')->onDelete('cascade');
+            $table->foreign('peserta_id')->references('id')->on('pesertas')->onDelete('cascade');
+            $table->foreign('jadwal_id')->references('id')->on('jadwals')->onDelete('cascade');
         });
     }
 

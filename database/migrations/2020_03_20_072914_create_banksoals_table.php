@@ -24,9 +24,9 @@ class CreateBanksoalsTable extends Migration
             $table->unsignedBigInteger('directory_id');
             $table->timestamps();
 
-            $table->foreign('matpel_id')->references('id')->on('matpels');
-            $table->foreign('author')->references('id')->on('users');
-            $table->foreign('directory_id')->references('id')->on('directories');
+            $table->foreign('matpel_id')->references('id')->on('matpels')->onDelete('cascade');
+            $table->foreign('author')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('directory_id')->references('id')->on('directories')->onDelete('cascade');
         });
     }
 

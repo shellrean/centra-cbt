@@ -125,23 +125,27 @@ class DirectoryController extends Controller
     public function uploadFile(Request $request)
     {
         if ($request->hasFile('upload')) {
+            $dir = Directory::find(request()->directory_id);
+            if(!$dir) {
+                return response()->json(['error' => true, 'message' => 'error, directory notfound'], 400);
+            }
             $file = $request->file('upload');
             $type = $file->getClientOriginalExtension();
             $size = $file->getSize();
             $filename = date('Ymd').'-'.$file->getClientOriginalName();
-            $path = $file->storeAs('public/'.'paste',$filename);
+            $path = $file->storeAs('public/'.$dir->slug,$filename);
 
             $data= [
-                'directory_id'      => '0',
+                'directory_id'      => request()->directory_id,
                 'filename'          => $filename,
                 'path'              => $path,
                 'exstension'        => $type,
-                'dirname'           => 'paste',
+                'dirname'           => $dir->slug,
                 'size'              => $size,
             ];
 
             $image = File::create($data);
-            $url = asset('storage/paste/' . $filename); 
+            $url = asset('storage/'.$dir->slug.'/' . $filename); 
             return response()->json([
                 'uploaded' => 1,
                 'fileName' => $filename,

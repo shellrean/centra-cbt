@@ -122,7 +122,33 @@ class DirectoryController extends Controller
     /**
      * 
      */
+    public function uploadFile(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            $file = $request->file('upload');
+            $type = $file->getClientOriginalExtension();
+            $size = $file->getSize();
+            $filename = date('Ymd').'-'.$file->getClientOriginalName();
+            $path = $file->storeAs('public/'.'paste',$filename);
 
+            $data= [
+                'directory_id'      => '0',
+                'filename'          => $filename,
+                'path'              => $path,
+                'exstension'        => $type,
+                'dirname'           => 'paste',
+                'size'              => $size,
+            ];
+
+            $image = File::create($data);
+            $url = asset('storage/paste/' . $filename); 
+            return response()->json([
+                'uploaded' => 1,
+                'fileName' => $filename,
+                'url' => $url
+            ]);
+        }
+    }
     /**
      *
      */

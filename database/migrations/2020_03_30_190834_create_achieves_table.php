@@ -18,7 +18,7 @@ class CreateAchievesTable extends Migration
             $table->bigInteger('banksoal_id');
             $table->bigInteger('peserta_id');
             $table->bigInteger('jadwal_id');
-            $table->json('achieve');
+            $table->text('achieve');
             $table->timestamps();
         });
     }

@@ -51,7 +51,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
 		Route::get('all-soal/banksoal/{id}','SoalController@getSoalByBanksoalAll');
 		Route::get('all-soal/banksoal/analys/{id}', 'SoalController@getSoalByBanksoalAnalys');
 		Route::post('soal/banksoal', 'SoalController@storeSoalBanksoal');
-        Route::post('soal/banksoal/paste', 'SoalController@storeSoalBanksoal');
+        Route::post('soal/banksoal/paste', 'SoalController@storeSoalBanksoalPaste');
 		Route::post('soal/banksoal/edit', 'SoalController@updateSoalBanksoal');
 		Route::delete('soal/banksoal/{id}', 'SoalController@destroySoalBanksoal');
 

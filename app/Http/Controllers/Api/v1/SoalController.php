@@ -129,6 +129,90 @@ class SoalController extends Controller
         return response()->json(['data' => 'success']);
     }
 
+    /**
+     * Store soal
+     *
+     * 
+     */
+    public function storeSoalBanksoalPaste(Request $request) 
+    {
+        $this->checkPermissions('create_soal');
+
+        switch ($request->tipe_soal) {
+            case '1':
+                $collection = collect(explode("***", $request->soal));
+                $arr = "ABCDEF";
+                $data = $collection->map(function ($item, $key) use ($arr) {
+                    $pil = explode("##", $item);
+                    return [
+                        'soal' => $pil[0],
+                        'jawab' => strrpos($arr, $pil[1]),
+                        'pilihan' => array_slice($pil, 2)
+                    ];
+                });
+
+                foreach ($data as $key => $value) {
+                    DB::beginTransaction();
+                    try {
+                        $soal = Soal::create([
+                            'banksoal_id'   => $request->banksoal_id,
+                            'pertanyaan'    => trim(preg_replace('/\s+/', ' ', $value['soal'])),
+                            'tipe_soal'     => $request->tipe_soal,
+                            'rujukan'       => ''
+                        ]);
+
+                        foreach($value['pilihan'] as $key=>$pilihan) {
+                            JawabanSoal::create([
+                                'soal_id'       => $soal->id,
+                                'text_jawaban'  => trim(preg_replace('/\s+/', ' ', $pilihan)),
+                                'correct'       => ($value['jawab'] == $key ? '1' : '0')
+                            ]);
+                        }
+
+                        DB::commit();
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                        return response()->json(['message' => $e->getMessage()], 400);
+                    }
+                }
+                return response()->json(['satus' => 'success']);
+
+                break;
+            case '2':
+                $collection = collect(explode("***", $request->soal));
+
+                $data = $collection->map(function ($item, $key) {
+                    return [
+                        'soal' => $item
+                    ];
+                });
+
+                foreach ($data as $key => $value) {
+                    DB::beginTransaction();
+                    try {
+                        $soal = Soal::create([
+                            'banksoal_id'   => $request->banksoal_id,
+                            'pertanyaan'    => trim(preg_replace('/\s+/', ' ', $value['soal'])),
+                            'tipe_soal'     => $request->tipe_soal,
+                            'rujukan'       => ''
+                        ]);
+
+                        DB::commit();
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                        return response()->json(['message' => $e->getMessage()], 400);
+                    }
+                }
+                return response()->json(['satus' => 'success']);
+
+                break;
+            default:
+                # code...
+                break;
+        }
+    
+    }
+
     public function updateSoalBanksoal(Request $request) 
     {
         $this->checkPermissions('edit_soal');
